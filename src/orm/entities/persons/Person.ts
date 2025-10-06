@@ -1,0 +1,43 @@
+import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
+
+import { InsurancePayment } from '../insurance/InsurancePayment';
+import { MedicalReport } from '../medical/MedicalReport';
+import { AccidentPerson } from '../MM/AccidentPerson';
+import { AdministrativeDecision } from '../police/AdministrativeDecision';
+import { Vehicle } from '../vehicles/Vehicle';
+
+@Entity('Персона')
+export class Person {
+  @PrimaryGeneratedColumn({ name: 'ID', type: 'bigint' })
+  id: number;
+
+  @Column()
+  Паспортні_дані: string;
+
+  @Column()
+  Імʼя: string;
+
+  @Column()
+  Прізвище: string;
+
+  @Column()
+  По_батькові: string;
+
+  @Column({ type: 'jsonb', nullable: true })
+  Посвідчення_водія?: any;
+
+  @OneToMany(() => AccidentPerson, (ap) => ap.Персона)
+  Участь_в_ДТП: AccidentPerson[];
+
+  @OneToMany(() => Vehicle, (v) => v.Персона)
+  Транспортні_засоби: Vehicle[];
+
+  @OneToMany(() => InsurancePayment, (ip) => ip.Персона)
+  Страхові_виплати: InsurancePayment[];
+
+  @OneToMany(() => MedicalReport, (mr) => mr.Персона)
+  Медичні_висновки: MedicalReport[];
+
+  @OneToMany(() => AdministrativeDecision, (ad) => ad.Персона)
+  Адмін_постанови: AdministrativeDecision[];
+}
