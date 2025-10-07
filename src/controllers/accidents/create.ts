@@ -2,11 +2,10 @@ import { Request, Response, NextFunction } from 'express';
 import { getRepository } from 'typeorm';
 
 import { Accident } from 'orm/entities/accidents/Accident';
-import { AssessmentStatus, ConsiderationStatus } from 'orm/entities/accidents/enums';
 import { CustomError } from 'utils/response/custom-error/CustomError';
 
 export const create = async (req: Request, res: Response, next: NextFunction) => {
-  const { date, time, place, reasons, type, media, assessmentStatus, considerationStatus } = req.body;
+  const { date, time, location, causes, type, media, assessmentStatus, considerationStatus } = req.body;
 
   const accidentRepository = getRepository(Accident);
 
@@ -14,12 +13,12 @@ export const create = async (req: Request, res: Response, next: NextFunction) =>
     const newAccident = accidentRepository.create({
       Дата: date,
       Час: time,
-      Місце: place,
-      Причини: reasons,
+      Місце: location,
+      Причини: causes,
       Тип: type,
-      Медіа: media ?? null,
-      Статус_оцінки: assessmentStatus ?? AssessmentStatus.InReview,
-      Статус_розгляду: considerationStatus ?? ConsiderationStatus.Registered,
+      Медіа: media,
+      Статус_оцінки: assessmentStatus,
+      Статус_розгляду: considerationStatus,
     });
 
     try {
