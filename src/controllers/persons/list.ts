@@ -8,7 +8,7 @@ export const list = async (req: Request, res: Response, next: NextFunction) => {
   const personRepository = getRepository(Person);
   try {
     const persons = await personRepository.find({
-      select: ['id', 'Паспортні_дані', 'Імʼя', 'Прізвище', 'По_батькові', 'Посвідчення_водія'],
+      select: ['id', 'Імʼя', 'Прізвище', 'По_батькові'],
       relations: [
         'Транспортні_засоби',
         'Страхові_виплати',
