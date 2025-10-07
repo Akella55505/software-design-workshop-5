@@ -1,7 +1,7 @@
 import { MigrationInterface, QueryRunner } from 'typeorm';
 
-export class AddAllEntities1759766991956 implements MigrationInterface {
-  name = 'AddAllEntities1759766991956';
+export class Initialize1759849240402 implements MigrationInterface {
+  name = 'Initialize1759849240402';
 
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.query(`
@@ -47,6 +47,18 @@ export class AddAllEntities1759766991956 implements MigrationInterface {
                 "Медик_id" bigint,
                 "Персона_id" bigint,
                 CONSTRAINT "PK_e8a21754d486d7f3b055b7380af" PRIMARY KEY ("ID")
+            )
+        `);
+    await queryRunner.query(`
+            CREATE TYPE "public"."accident_role" AS ENUM('Винуватець', 'Потерпілий')
+        `);
+    await queryRunner.query(`
+            CREATE TABLE "tbl_ДТП_MM_Персона" (
+                "ID" BIGSERIAL NOT NULL,
+                "роль" "public"."accident_role" NOT NULL,
+                "ДТП_id" bigint,
+                "Персона_id" bigint,
+                CONSTRAINT "PK_87666cfcf1ae6d683e63465e902" PRIMARY KEY ("ID")
             )
         `);
     await queryRunner.query(`
@@ -116,99 +128,115 @@ export class AddAllEntities1759766991956 implements MigrationInterface {
                 "медіа" jsonb,
                 "місце" text NOT NULL,
                 "причини" text NOT NULL,
-                "статус_оцінки" "public"."consideration_status" NOT NULL DEFAULT 'Зареєстровано',
-                "статус_розгляду" "public"."assessment_status" NOT NULL DEFAULT 'На розгляді',
+                "статус_розгляду" "public"."consideration_status" NOT NULL DEFAULT 'Зареєстровано',
+                "статус_оцінки" "public"."assessment_status" NOT NULL DEFAULT 'На розгляді',
                 "тип" text NOT NULL,
                 "час" TIME NOT NULL,
                 CONSTRAINT "PK_32ca03413185189fdee911f2aae" PRIMARY KEY ("ID")
             )
         `);
     await queryRunner.query(`
-            CREATE TYPE "public"."accident_role" AS ENUM('Винуватець', 'Потерпілий')
+            ALTER TABLE "users" DROP CONSTRAINT "UQ_97672ac88f789774dd47f7c8be3"
         `);
     await queryRunner.query(`
-            CREATE TABLE "tbl_ДТП_MM_Персона" (
-                "ID" BIGSERIAL NOT NULL,
-                "роль" "public"."accident_role" NOT NULL,
-                "ДТП_id" bigint,
-                "Персона_id" bigint,
-                CONSTRAINT "PK_87666cfcf1ae6d683e63465e902" PRIMARY KEY ("ID")
-            )
+            ALTER TABLE "users" DROP COLUMN "email"
         `);
-
+    await queryRunner.query(`
+            ALTER TABLE "users"
+            ADD "email" character varying
+        `);
+    await queryRunner.query(`
+            ALTER TABLE "users"
+            ADD CONSTRAINT "UQ_97672ac88f789774dd47f7c8be3" UNIQUE ("email")
+        `);
+    await queryRunner.query(`
+            ALTER TABLE "users" DROP CONSTRAINT "UQ_fe0bb3f6520ee0469504521e710"
+        `);
+    await queryRunner.query(`
+            ALTER TABLE "users" DROP COLUMN "username"
+        `);
+    await queryRunner.query(`
+            ALTER TABLE "users"
+            ADD "username" character varying
+        `);
+    await queryRunner.query(`
+            ALTER TABLE "users"
+            ADD CONSTRAINT "UQ_fe0bb3f6520ee0469504521e710" UNIQUE ("username")
+        `);
+    await queryRunner.query(`
+            ALTER TABLE "users" DROP COLUMN "name"
+        `);
+    await queryRunner.query(`
+            ALTER TABLE "users"
+            ADD "name" character varying
+        `);
     await queryRunner.query(`
             ALTER TABLE "Судове_рішення"
-            ADD CONSTRAINT "FK_0e1233a42961aa56f17a1dab2f7" FOREIGN KEY ("ДТП_id") REFERENCES "ДТП"("ID") ON DELETE NO ACTION ON UPDATE NO ACTION
+            ADD CONSTRAINT "FK_0e1233a42961aa56f17a1dab2f7" FOREIGN KEY ("ДТП_id") REFERENCES "ДТП"("ID") ON DELETE CASCADE ON UPDATE CASCADE
         `);
     await queryRunner.query(`
             ALTER TABLE "tbl_ДТП_MM_Транспортний_засіб"
-            ADD CONSTRAINT "FK_7ac1abe260bc58d9ef01ba665a4" FOREIGN KEY ("ДТП_id") REFERENCES "ДТП"("ID") ON DELETE NO ACTION ON UPDATE NO ACTION
+            ADD CONSTRAINT "FK_7ac1abe260bc58d9ef01ba665a4" FOREIGN KEY ("ДТП_id") REFERENCES "ДТП"("ID") ON DELETE CASCADE ON UPDATE CASCADE
         `);
     await queryRunner.query(`
             ALTER TABLE "tbl_ДТП_MM_Транспортний_засіб"
-            ADD CONSTRAINT "FK_3cc8836197c638655ad9721fa40" FOREIGN KEY ("Транспортний_засіб_id") REFERENCES "Транспортний_засіб"("ID") ON DELETE NO ACTION ON UPDATE NO ACTION
+            ADD CONSTRAINT "FK_3cc8836197c638655ad9721fa40" FOREIGN KEY ("Транспортний_засіб_id") REFERENCES "Транспортний_засіб"("ID") ON DELETE CASCADE ON UPDATE CASCADE
         `);
     await queryRunner.query(`
             ALTER TABLE "Страхова_виплата"
-            ADD CONSTRAINT "FK_928ad65bfbe7f5b7b7a2bf2699b" FOREIGN KEY ("Персона_id") REFERENCES "Персона"("ID") ON DELETE NO ACTION ON UPDATE NO ACTION
+            ADD CONSTRAINT "FK_928ad65bfbe7f5b7b7a2bf2699b" FOREIGN KEY ("Персона_id") REFERENCES "Персона"("ID") ON DELETE CASCADE ON UPDATE CASCADE
         `);
     await queryRunner.query(`
             ALTER TABLE "Страхова_виплата"
-            ADD CONSTRAINT "FK_7d6b0cd1892a983dd12f6fef247" FOREIGN KEY ("Страхова_оцінка_id") REFERENCES "Страхова_оцінка"("ID") ON DELETE NO ACTION ON UPDATE NO ACTION
+            ADD CONSTRAINT "FK_7d6b0cd1892a983dd12f6fef247" FOREIGN KEY ("Страхова_оцінка_id") REFERENCES "Страхова_оцінка"("ID") ON DELETE CASCADE ON UPDATE CASCADE
         `);
     await queryRunner.query(`
             ALTER TABLE "Медичний_висновок"
-            ADD CONSTRAINT "FK_924d053f654afaa0a07b321c3b9" FOREIGN KEY ("ДТП_id") REFERENCES "ДТП"("ID") ON DELETE NO ACTION ON UPDATE NO ACTION
+            ADD CONSTRAINT "FK_924d053f654afaa0a07b321c3b9" FOREIGN KEY ("ДТП_id") REFERENCES "ДТП"("ID") ON DELETE CASCADE ON UPDATE CASCADE
         `);
     await queryRunner.query(`
             ALTER TABLE "Медичний_висновок"
-            ADD CONSTRAINT "FK_426659eebc64612846d4a1454f7" FOREIGN KEY ("Медик_id") REFERENCES "Медик"("Номер_ліцензії") ON DELETE NO ACTION ON UPDATE NO ACTION
+            ADD CONSTRAINT "FK_426659eebc64612846d4a1454f7" FOREIGN KEY ("Медик_id") REFERENCES "Медик"("Номер_ліцензії") ON DELETE CASCADE ON UPDATE CASCADE
         `);
     await queryRunner.query(`
             ALTER TABLE "Медичний_висновок"
-            ADD CONSTRAINT "FK_3f897244bc346df379a89f52b2d" FOREIGN KEY ("Персона_id") REFERENCES "Персона"("ID") ON DELETE NO ACTION ON UPDATE NO ACTION
+            ADD CONSTRAINT "FK_3f897244bc346df379a89f52b2d" FOREIGN KEY ("Персона_id") REFERENCES "Персона"("ID") ON DELETE CASCADE ON UPDATE CASCADE
+        `);
+    await queryRunner.query(`
+            ALTER TABLE "tbl_ДТП_MM_Персона"
+            ADD CONSTRAINT "FK_505c81656f3e87460c04208c11a" FOREIGN KEY ("ДТП_id") REFERENCES "ДТП"("ID") ON DELETE CASCADE ON UPDATE CASCADE
+        `);
+    await queryRunner.query(`
+            ALTER TABLE "tbl_ДТП_MM_Персона"
+            ADD CONSTRAINT "FK_827ceb51f217fd46825653e6448" FOREIGN KEY ("Персона_id") REFERENCES "Персона"("ID") ON DELETE CASCADE ON UPDATE CASCADE
         `);
     await queryRunner.query(`
             ALTER TABLE "Адміністративна_постанова"
-            ADD CONSTRAINT "FK_9754e70a848042feb9dd4f9adac" FOREIGN KEY ("ДТП_id") REFERENCES "ДТП"("ID") ON DELETE NO ACTION ON UPDATE NO ACTION
+            ADD CONSTRAINT "FK_9754e70a848042feb9dd4f9adac" FOREIGN KEY ("ДТП_id") REFERENCES "ДТП"("ID") ON DELETE CASCADE ON UPDATE CASCADE
         `);
     await queryRunner.query(`
             ALTER TABLE "Адміністративна_постанова"
-            ADD CONSTRAINT "FK_1f37e96d6c7150ec194bf39728a" FOREIGN KEY ("Персона_id") REFERENCES "Персона"("ID") ON DELETE NO ACTION ON UPDATE NO ACTION
+            ADD CONSTRAINT "FK_1f37e96d6c7150ec194bf39728a" FOREIGN KEY ("Персона_id") REFERENCES "Персона"("ID") ON DELETE CASCADE ON UPDATE CASCADE
         `);
     await queryRunner.query(`
             ALTER TABLE "Адміністративна_постанова"
-            ADD CONSTRAINT "FK_3bd4d421ed14044b40e6f7d66b8" FOREIGN KEY ("Поліцейський_id") REFERENCES "Поліцейський"("Номер_посвідчення") ON DELETE NO ACTION ON UPDATE NO ACTION
+            ADD CONSTRAINT "FK_3bd4d421ed14044b40e6f7d66b8" FOREIGN KEY ("Поліцейський_id") REFERENCES "Поліцейський"("Номер_посвідчення") ON DELETE CASCADE ON UPDATE CASCADE
         `);
     await queryRunner.query(`
             ALTER TABLE "Транспортний_засіб"
-            ADD CONSTRAINT "FK_bc99101a87eb13c884c1ff5a2e9" FOREIGN KEY ("персона_id") REFERENCES "Персона"("ID") ON DELETE NO ACTION ON UPDATE NO ACTION
+            ADD CONSTRAINT "FK_bc99101a87eb13c884c1ff5a2e9" FOREIGN KEY ("персона_id") REFERENCES "Персона"("ID") ON DELETE CASCADE ON UPDATE CASCADE
         `);
     await queryRunner.query(`
             ALTER TABLE "Страхова_оцінка"
-            ADD CONSTRAINT "FK_a1cc0f2f4ce920873e504e05ad0" FOREIGN KEY ("ДТП_id") REFERENCES "ДТП"("ID") ON DELETE NO ACTION ON UPDATE NO ACTION
+            ADD CONSTRAINT "FK_a1cc0f2f4ce920873e504e05ad0" FOREIGN KEY ("ДТП_id") REFERENCES "ДТП"("ID") ON DELETE CASCADE ON UPDATE CASCADE
         `);
     await queryRunner.query(`
             ALTER TABLE "Страхова_оцінка"
-            ADD CONSTRAINT "FK_d48dc04ea1d38a8043fd2656554" FOREIGN KEY ("Транспортний_засіб_id") REFERENCES "Транспортний_засіб"("ID") ON DELETE NO ACTION ON UPDATE NO ACTION
-        `);
-    await queryRunner.query(`
-            ALTER TABLE "tbl_ДТП_MM_Персона"
-            ADD CONSTRAINT "FK_505c81656f3e87460c04208c11a" FOREIGN KEY ("ДТП_id") REFERENCES "ДТП"("ID") ON DELETE NO ACTION ON UPDATE NO ACTION
-        `);
-    await queryRunner.query(`
-            ALTER TABLE "tbl_ДТП_MM_Персона"
-            ADD CONSTRAINT "FK_827ceb51f217fd46825653e6448" FOREIGN KEY ("Персона_id") REFERENCES "Персона"("ID") ON DELETE NO ACTION ON UPDATE NO ACTION
+            ADD CONSTRAINT "FK_d48dc04ea1d38a8043fd2656554" FOREIGN KEY ("Транспортний_засіб_id") REFERENCES "Транспортний_засіб"("ID") ON DELETE CASCADE ON UPDATE CASCADE
         `);
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
-    await queryRunner.query(`
-            ALTER TABLE "tbl_ДТП_MM_Персона" DROP CONSTRAINT "FK_827ceb51f217fd46825653e6448"
-        `);
-    await queryRunner.query(`
-            ALTER TABLE "tbl_ДТП_MM_Персона" DROP CONSTRAINT "FK_505c81656f3e87460c04208c11a"
-        `);
     await queryRunner.query(`
             ALTER TABLE "Страхова_оцінка" DROP CONSTRAINT "FK_d48dc04ea1d38a8043fd2656554"
         `);
@@ -226,6 +254,12 @@ export class AddAllEntities1759766991956 implements MigrationInterface {
         `);
     await queryRunner.query(`
             ALTER TABLE "Адміністративна_постанова" DROP CONSTRAINT "FK_9754e70a848042feb9dd4f9adac"
+        `);
+    await queryRunner.query(`
+            ALTER TABLE "tbl_ДТП_MM_Персона" DROP CONSTRAINT "FK_827ceb51f217fd46825653e6448"
+        `);
+    await queryRunner.query(`
+            ALTER TABLE "tbl_ДТП_MM_Персона" DROP CONSTRAINT "FK_505c81656f3e87460c04208c11a"
         `);
     await queryRunner.query(`
             ALTER TABLE "Медичний_висновок" DROP CONSTRAINT "FK_3f897244bc346df379a89f52b2d"
@@ -252,10 +286,39 @@ export class AddAllEntities1759766991956 implements MigrationInterface {
             ALTER TABLE "Судове_рішення" DROP CONSTRAINT "FK_0e1233a42961aa56f17a1dab2f7"
         `);
     await queryRunner.query(`
-            DROP TABLE "tbl_ДТП_MM_Персона"
+            ALTER TABLE "users" DROP COLUMN "name"
         `);
     await queryRunner.query(`
-            DROP TYPE "public"."accident_role"
+            ALTER TABLE "users"
+            ADD "name" character varying(40)
+        `);
+    await queryRunner.query(`
+            ALTER TABLE "users" DROP CONSTRAINT "UQ_fe0bb3f6520ee0469504521e710"
+        `);
+    await queryRunner.query(`
+            ALTER TABLE "users" DROP COLUMN "username"
+        `);
+    await queryRunner.query(`
+            ALTER TABLE "users"
+            ADD "username" character varying(40)
+        `);
+    await queryRunner.query(`
+            ALTER TABLE "users"
+            ADD CONSTRAINT "UQ_fe0bb3f6520ee0469504521e710" UNIQUE ("username")
+        `);
+    await queryRunner.query(`
+            ALTER TABLE "users" DROP CONSTRAINT "UQ_97672ac88f789774dd47f7c8be3"
+        `);
+    await queryRunner.query(`
+            ALTER TABLE "users" DROP COLUMN "email"
+        `);
+    await queryRunner.query(`
+            ALTER TABLE "users"
+            ADD "email" character varying(100)
+        `);
+    await queryRunner.query(`
+            ALTER TABLE "users"
+            ADD CONSTRAINT "UQ_97672ac88f789774dd47f7c8be3" UNIQUE ("email")
         `);
     await queryRunner.query(`
             DROP TABLE "ДТП"
@@ -280,6 +343,12 @@ export class AddAllEntities1759766991956 implements MigrationInterface {
         `);
     await queryRunner.query(`
             DROP TABLE "Поліцейський"
+        `);
+    await queryRunner.query(`
+            DROP TABLE "tbl_ДТП_MM_Персона"
+        `);
+    await queryRunner.query(`
+            DROP TYPE "public"."accident_role"
         `);
     await queryRunner.query(`
             DROP TABLE "Медичний_висновок"
