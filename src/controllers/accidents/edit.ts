@@ -2,7 +2,6 @@ import { Request, Response, NextFunction } from 'express';
 import { getRepository } from 'typeorm';
 
 import { Accident } from 'orm/entities/accidents/Accident';
-import { AssessmentStatus, ConsiderationStatus } from 'orm/entities/accidents/enums';
 import { CustomError } from 'utils/response/custom-error/CustomError';
 
 export const edit = async (req: Request, res: Response, next: NextFunction) => {
@@ -37,6 +36,8 @@ export const edit = async (req: Request, res: Response, next: NextFunction) => {
         date: accident.Дата,
         causes: accident.Причини,
         media: accident.Медіа,
+        assessmentStatus: accident.Статус_оцінки,
+        considerationStatus: accident.Статус_розгляду,
       });
     } catch (err) {
       const customError = new CustomError(409, 'Raw', `Accident can't be saved.`, null, err);
