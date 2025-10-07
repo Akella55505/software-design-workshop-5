@@ -26,18 +26,18 @@ export class Person {
   @Column({ type: 'jsonb', nullable: true })
   Посвідчення_водія?: any;
 
-  @OneToMany(() => AccidentPerson, (ap) => ap.Персона)
+  @OneToMany(() => AccidentPerson, (ap) => ap.Персона, { onDelete: 'CASCADE', onUpdate: 'CASCADE' })
   Участь_в_ДТП: AccidentPerson[];
 
-  @OneToMany(() => Vehicle, (v) => v.Персона)
+  @OneToMany(() => Vehicle, (v) => v.Персона, { onDelete: 'CASCADE', onUpdate: 'CASCADE' })
   Транспортні_засоби: Vehicle[];
 
-  @OneToMany(() => InsurancePayment, (ip) => ip.Персона)
+  @OneToMany(() => InsurancePayment, (ip) => ip.Персона, { onDelete: 'CASCADE', onUpdate: 'CASCADE' })
   Страхові_виплати: InsurancePayment[];
 
-  @OneToMany(() => MedicalReport, (mr) => mr.Персона)
+  @OneToMany(() => MedicalReport, (mr) => mr.Персона, { onDelete: 'CASCADE', onUpdate: 'CASCADE' })
   Медичні_висновки: MedicalReport[];
 
-  @OneToMany(() => AdministrativeDecision, (ad) => ad.Персона)
+  @OneToMany(() => AdministrativeDecision, (ad) => ad.Персона, { onDelete: 'CASCADE', onUpdate: 'CASCADE' })
   Адмін_постанови: AdministrativeDecision[];
 }

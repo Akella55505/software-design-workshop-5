@@ -13,15 +13,15 @@ export class MedicalReport {
   @Column({ type: 'text' })
   Вирок: string;
 
-  @ManyToOne(() => Accident, (a) => a.Медичні_висновки)
+  @ManyToOne(() => Accident, (a) => a.Медичні_висновки, { onDelete: 'CASCADE', onUpdate: 'CASCADE' })
   @JoinColumn({ name: 'ДТП_id' })
   ДТП: Accident;
 
-  @ManyToOne(() => Medic, (m) => m.Медичні_висновки)
+  @ManyToOne(() => Medic, (m) => m.Медичні_висновки, { onDelete: 'CASCADE', onUpdate: 'CASCADE' })
   @JoinColumn({ name: 'Медик_id' })
   Медик: Medic;
 
-  @ManyToOne(() => Person, (p) => p.Медичні_висновки)
+  @ManyToOne(() => Person, (p) => p.Медичні_висновки, { onDelete: 'CASCADE', onUpdate: 'CASCADE' })
   @JoinColumn({ name: 'Персона_id' })
   Персона: Person;
 }

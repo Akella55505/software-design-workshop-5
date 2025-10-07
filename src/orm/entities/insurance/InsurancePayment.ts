@@ -9,11 +9,11 @@ export class InsurancePayment {
   @PrimaryGeneratedColumn({ name: 'ID', type: 'bigint' })
   id: number;
 
-  @ManyToOne(() => Person, (p) => p.Страхові_виплати)
+  @ManyToOne(() => Person, (p) => p.Страхові_виплати, { onDelete: 'CASCADE', onUpdate: 'CASCADE' })
   @JoinColumn({ name: 'Персона_id' })
   Персона: Person;
 
-  @ManyToOne(() => InsuranceEvaluation, (ie) => ie.Виплати)
+  @ManyToOne(() => InsuranceEvaluation, (ie) => ie.Виплати, { onDelete: 'CASCADE', onUpdate: 'CASCADE' })
   @JoinColumn({ name: 'Страхова_оцінка_id' })
   Страхова_оцінка: InsuranceEvaluation;
 

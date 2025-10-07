@@ -13,14 +13,14 @@ export class InsuranceEvaluation {
   @Column({ type: 'text' })
   Висновок: string;
 
-  @ManyToOne(() => Accident, (a) => a.Страхові_оцінки)
+  @ManyToOne(() => Accident, (a) => a.Страхові_оцінки, { onDelete: 'CASCADE', onUpdate: 'CASCADE' })
   @JoinColumn({ name: 'ДТП_id' })
   ДТП: Accident;
 
-  @ManyToOne(() => Vehicle, (v) => v.Страхові_оцінки)
+  @ManyToOne(() => Vehicle, (v) => v.Страхові_оцінки, { onDelete: 'CASCADE', onUpdate: 'CASCADE' })
   @JoinColumn({ name: 'Транспортний_засіб_id' })
   Транспортний_засіб: Vehicle;
 
-  @OneToMany(() => InsurancePayment, (ip) => ip.Страхова_оцінка)
+  @OneToMany(() => InsurancePayment, (ip) => ip.Страхова_оцінка, { onDelete: 'CASCADE', onUpdate: 'CASCADE' })
   Виплати: InsurancePayment[];
 }

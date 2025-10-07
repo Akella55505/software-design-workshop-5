@@ -16,6 +16,6 @@ export class Police {
   @Column()
   По_батькові: string;
 
-  @OneToMany(() => AdministrativeDecision, (ad) => ad.Поліцейський)
+  @OneToMany(() => AdministrativeDecision, (ad) => ad.Поліцейський, { onDelete: 'CASCADE', onUpdate: 'CASCADE' })
   Постанови: AdministrativeDecision[];
 }

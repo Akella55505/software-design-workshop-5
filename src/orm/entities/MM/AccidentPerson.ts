@@ -10,11 +10,11 @@ export class AccidentPerson {
   @PrimaryGeneratedColumn({ name: 'ID', type: 'bigint' })
   id: number;
 
-  @ManyToOne(() => Accident, (a) => a.Персони)
+  @ManyToOne(() => Accident, (a) => a.Персони, { onDelete: 'CASCADE', onUpdate: 'CASCADE' })
   @JoinColumn({ name: 'ДТП_id' })
   ДТП: Accident;
 
-  @ManyToOne(() => Person, (p) => p.Участь_в_ДТП)
+  @ManyToOne(() => Person, (p) => p.Участь_в_ДТП, { onDelete: 'CASCADE', onUpdate: 'CASCADE' })
   @JoinColumn({ name: 'Персона_id' })
   Персона: Person;
 

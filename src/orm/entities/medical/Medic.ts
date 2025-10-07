@@ -16,6 +16,6 @@ export class Medic {
   @Column()
   По_батькові: string;
 
-  @OneToMany(() => MedicalReport, (mr) => mr.Медик)
+  @OneToMany(() => MedicalReport, (mr) => mr.Медик, { onDelete: 'CASCADE', onUpdate: 'CASCADE' })
   Медичні_висновки: MedicalReport[];
 }

@@ -10,15 +10,15 @@ export class AdministrativeDecision {
   @PrimaryGeneratedColumn({ name: 'ID', type: 'bigint' })
   id: number;
 
-  @ManyToOne(() => Accident, (a) => a.Адмін_постанови)
+  @ManyToOne(() => Accident, (a) => a.Адмін_постанови, { onDelete: 'CASCADE', onUpdate: 'CASCADE' })
   @JoinColumn({ name: 'ДТП_id' })
   ДТП: Accident;
 
-  @ManyToOne(() => Person, (p) => p.Адмін_постанови)
+  @ManyToOne(() => Person, (p) => p.Адмін_постанови, { onDelete: 'CASCADE', onUpdate: 'CASCADE' })
   @JoinColumn({ name: 'Персона_id' })
   Персона: Person;
 
-  @ManyToOne(() => Police, (p) => p.Постанови)
+  @ManyToOne(() => Police, (p) => p.Постанови, { onDelete: 'CASCADE', onUpdate: 'CASCADE' })
   @JoinColumn({ name: 'Поліцейський_id' })
   Поліцейський: Police;
 

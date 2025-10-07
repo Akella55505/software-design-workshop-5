@@ -44,21 +44,21 @@ export class Accident {
   @Column({ type: 'time without time zone' })
   Час: string;
 
-  @OneToMany(() => AccidentPerson, (ap) => ap.ДТП)
+  @OneToMany(() => AccidentPerson, (ap) => ap.ДТП, { onDelete: 'CASCADE', onUpdate: 'CASCADE' })
   Персони: AccidentPerson[];
 
-  @OneToMany(() => AccidentVehicle, (av) => av.ДТП)
+  @OneToMany(() => AccidentVehicle, (av) => av.ДТП, { onDelete: 'CASCADE', onUpdate: 'CASCADE' })
   Транспортні_засоби: AccidentVehicle[];
 
-  @OneToMany(() => InsuranceEvaluation, (ie) => ie.ДТП)
+  @OneToMany(() => InsuranceEvaluation, (ie) => ie.ДТП, { onDelete: 'CASCADE', onUpdate: 'CASCADE' })
   Страхові_оцінки: InsuranceEvaluation[];
 
-  @OneToOne(() => CourtDecision, (cd) => cd.ДТП)
+  @OneToOne(() => CourtDecision, (cd) => cd.ДТП, { onDelete: 'CASCADE', onUpdate: 'CASCADE' })
   Судове_рішення: CourtDecision;
 
-  @OneToMany(() => MedicalReport, (mr) => mr.ДТП)
+  @OneToMany(() => MedicalReport, (mr) => mr.ДТП, { onDelete: 'CASCADE', onUpdate: 'CASCADE' })
   Медичні_висновки: MedicalReport[];
 
-  @OneToMany(() => AdministrativeDecision, (ad) => ad.ДТП)
+  @OneToMany(() => AdministrativeDecision, (ad) => ad.ДТП, { onDelete: 'CASCADE', onUpdate: 'CASCADE' })
   Адмін_постанови: AdministrativeDecision[];
 }

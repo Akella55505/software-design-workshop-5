@@ -21,12 +21,12 @@ export class Vehicle {
   @Column({ length: 8 })
   Номерний_знак: string;
 
-  @ManyToOne(() => Person, (p) => p.Транспортні_засоби)
+  @ManyToOne(() => Person, (p) => p.Транспортні_засоби, { onDelete: 'CASCADE', onUpdate: 'CASCADE' })
   Персона: Person;
 
-  @OneToMany(() => AccidentVehicle, (av) => av.Транспортний_засіб)
+  @OneToMany(() => AccidentVehicle, (av) => av.Транспортний_засіб, { onDelete: 'CASCADE', onUpdate: 'CASCADE' })
   Участь_в_ДТП: AccidentVehicle[];
 
-  @OneToMany(() => InsuranceEvaluation, (ie) => ie.Транспортний_засіб)
+  @OneToMany(() => InsuranceEvaluation, (ie) => ie.Транспортний_засіб, { onDelete: 'CASCADE', onUpdate: 'CASCADE' })
   Страхові_оцінки: InsuranceEvaluation[];
 }
