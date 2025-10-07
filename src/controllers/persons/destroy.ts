@@ -19,11 +19,9 @@ export const destroy = async (req: Request, res: Response, next: NextFunction) =
 
     res.customSuccess(200, 'Person successfully deleted.', {
       id: person.id,
-      license: person.Посвідчення_водія,
       name: person.Імʼя,
       surname: person.Прізвище,
       patronymic: person.По_батькові,
-      passportDetails: person.Паспортні_дані,
     });
   } catch (err) {
     const customError = new CustomError(400, 'Raw', 'Error', null, err);
