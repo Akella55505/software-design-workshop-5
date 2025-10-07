@@ -46,7 +46,6 @@
 - `GET /v1/vehicle/:id` — отримання запису за ID
 - `PATCH /v1/vehicle/:id` — оновлення запису
 - `DELETE /v1/vehicle/:id` — видалення запису
--
 
 ---
 
