@@ -33,10 +33,10 @@ export class Accident {
     enumName: 'consideration_status',
     default: ConsiderationStatus.Registered,
   })
-  Статус_оцінки: ConsiderationStatus;
+  Статус_розгляду: ConsiderationStatus;
 
   @Column({ type: 'enum', enum: AssessmentStatus, enumName: 'assessment_status', default: AssessmentStatus.InReview })
-  Статус_розгляду: AssessmentStatus;
+  Статус_оцінки: AssessmentStatus;
 
   @Column({ type: 'text' })
   Тип: string;
