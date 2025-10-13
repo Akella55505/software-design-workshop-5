@@ -1,26 +1,18 @@
 import { Request, Response, NextFunction } from 'express';
-import { getRepository } from 'typeorm';
 
-import { Person } from 'orm/entities/persons/Person';
-import { CustomError } from 'utils/response/custom-error/CustomError';
+import { PersonDto } from '../../dtos/PersonDto';
+import { PersonService } from '../../services/PersonService';
 
 export const list = async (req: Request, res: Response, next: NextFunction) => {
-  const personRepository = getRepository(Person);
+  const personService = new PersonService();
   try {
-    const persons = await personRepository.find({
-      select: ['id', 'Імʼя', 'Прізвище', 'По_батькові'],
-      relations: [
-        'Транспортні_засоби',
-        'Страхові_виплати',
-        'Медичні_висновки',
-        'Адмін_постанови',
-        'Участь_в_ДТП',
-        'Участь_в_ДТП.ДТП',
-      ],
-    });
-    res.customSuccess(200, 'List of persons.', persons);
+    const persons = await personService.list();
+    res.customSuccess(
+      200,
+      'List of persons.',
+      persons.map((person) => new PersonDto(person)),
+    );
   } catch (err) {
-    const customError = new CustomError(400, 'Raw', `Can't retrieve list of persons.`, null, err);
-    return next(customError);
+    return next(err);
   }
 };
