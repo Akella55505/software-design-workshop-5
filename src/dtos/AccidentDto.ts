@@ -1,3 +1,4 @@
+import { Accident } from '../orm/entities/accidents/Accident';
 import { AssessmentStatus, ConsiderationStatus } from '../orm/entities/accidents/enums';
 
 import { NestedPersonDto } from './NestedPersonDto';
@@ -12,10 +13,10 @@ export class AccidentDto {
   assessmentStatus: AssessmentStatus;
   type: string;
   time: string;
-  persons: NestedPersonDto[];
-  vehicles: NestedVehicleDto[];
+  persons?: NestedPersonDto[];
+  vehicles?: NestedVehicleDto[];
 
-  constructor(accident: any) {
+  constructor(accident: Accident) {
     this.location = accident.Місце;
     this.type = accident.Тип;
     this.time = accident.Час;
@@ -24,7 +25,7 @@ export class AccidentDto {
     this.media = accident.Медіа;
     this.considerationStatus = accident.Статус_розгляду;
     this.assessmentStatus = accident.Статус_оцінки;
-    this.persons = accident.Персони?.map((person) => new NestedPersonDto(person)) ?? [];
-    this.vehicles = accident.Транспортні_засоби?.map((vehicle) => new NestedVehicleDto(vehicle)) ?? [];
+    this.persons = accident.Персони?.map((person) => new NestedPersonDto(person));
+    this.vehicles = accident.Транспортні_засоби?.map((vehicle) => new NestedVehicleDto(vehicle));
   }
 }
