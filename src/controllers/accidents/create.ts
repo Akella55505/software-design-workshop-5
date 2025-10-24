@@ -2,7 +2,6 @@ import { Request, Response, NextFunction } from 'express';
 
 import { AccidentDto } from '../../dtos/AccidentDto';
 import { AccidentService } from '../../services/AccidentService';
-import { CustomError } from '../../utils/response/custom-error/CustomError';
 
 export const create = async (req: Request, res: Response, next: NextFunction) => {
   const accidentService = new AccidentService();
