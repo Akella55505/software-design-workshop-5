@@ -5,6 +5,7 @@ import { NestedPersonDto } from './NestedPersonDto';
 import { NestedVehicleDto } from './NestedVehicleDto';
 
 export class AccidentDto {
+  id: number;
   date: Date;
   media: string;
   location: string;
@@ -17,6 +18,7 @@ export class AccidentDto {
   vehicles?: NestedVehicleDto[];
 
   constructor(accident: Accident) {
+    this.id = accident.id;
     this.location = accident.Місце;
     this.type = accident.Тип;
     this.time = accident.Час;
