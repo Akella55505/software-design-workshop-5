@@ -11,8 +11,8 @@ export class Person {
   @PrimaryGeneratedColumn({ name: 'ID', type: 'bigint' })
   id: number;
 
-  @Column()
-  Паспортні_дані: string;
+  @Column({ type: 'jsonb' })
+  Паспортні_дані: any;
 
   @Column()
   Імʼя: string;

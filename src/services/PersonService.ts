@@ -69,11 +69,11 @@ export class PersonService {
   }
 
   async create(requestBody: any) {
-    const { passportData, firstName, lastName, patronymic, driverLicense } = requestBody;
+    const { passportData, name, surname, patronymic, driverLicense } = requestBody;
 
     const personRepository = getRepository(Person);
 
-    const existingPerson = await personRepository.findOne({ where: { Паспортні_дані: passportData } });
+    const existingPerson = await personRepository.findOne({ where: { Паспортні_дані: JSON.stringify(passportData) } });
     if (existingPerson) {
       throw new CustomError(409, 'General', `Person with passport data ${passportData} already exists.`, [
         'Person already exists.',
@@ -82,8 +82,8 @@ export class PersonService {
 
     const newPerson = personRepository.create({
       Паспортні_дані: passportData,
-      Імʼя: firstName,
-      Прізвище: lastName,
+      Імʼя: name,
+      Прізвище: surname,
       По_батькові: patronymic,
       Посвідчення_водія: driverLicense ?? null,
     });
