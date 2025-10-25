@@ -83,7 +83,7 @@ export class Initialize1759849240402 implements MigrationInterface {
     await queryRunner.query(`
             CREATE TABLE "Персона" (
                 "ID" BIGSERIAL NOT NULL,
-                "паспортні_дані" character varying NOT NULL,
+                "паспортні_дані" jsonb NOT NULL,
                 "імʼя" character varying NOT NULL,
                 "прізвище" character varying NOT NULL,
                 "по_батькові" character varying NOT NULL,
